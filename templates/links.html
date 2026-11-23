@@ -13,8 +13,8 @@
         </tr>
     </thead>
     <tbody>
-        {% for code, link in links %}
-        {% set short_url = url_for('follow_link', code=code, _external=True) %}
+        {% for link in links %}
+        {% set short_url = url_for('follow_link', code=link.short_code, _external=True) %}
         <tr>
             <td>{{ link.title }}</td>
             <td>{{ link.original_url }}</td>
