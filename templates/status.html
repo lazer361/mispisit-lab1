@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card">
+    <div class="card-body p-4">
+        <h1 class="h3 mb-3">Состояние системы</h1>
+
+        {% if database_ready %}
+        <p class="alert alert-success">Приложение отвечает. База данных доступна.</p>
+        <h2 class="h5">Последнее событие</h2>
+        {% if latest %}
+        {% set event, link = latest %}
+        <p class="fw-semibold">{{ event.action }}</p>
+        <dl class="row mb-0">
+            <dt class="col-sm-3">Ссылка</dt>
+            <dd class="col-sm-9 text-break">{{ link.title }}</dd>
+            <dt class="col-sm-3">Короткий код</dt>
+            <dd class="col-sm-9">{{ link.short_code }}</dd>
+            <dt class="col-sm-3">Время</dt>
+            <dd class="col-sm-9 mb-0">{{ event.created_at.strftime('%d.%m.%Y %H:%M:%S %Z') }}</dd>
+        </dl>
+        {% else %}
+        <p class="text-body-secondary mb-0">Событий пока нет.</p>
+        {% endif %}
+        {% else %}
+        <p class="alert alert-warning mb-0" role="alert">Приложение отвечает. База данных недоступна.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

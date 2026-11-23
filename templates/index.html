@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card bg-primary-subtle border-primary-subtle">
+    <div class="card-body p-4">
+        <h1 class="h2">Короткие ссылки</h1>
+        <p>Сервис для тех, кому нужно сократить длинную ссылку и поделиться ею.</p>
+        <a class="btn btn-primary" href="{{ url_for('create_link') }}">Создать ссылку</a>
+    </div>
+</div>
+{% endblock %}
