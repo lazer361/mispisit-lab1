@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="alert alert-danger p-4" role="alert">
+    <h1 class="h3 alert-heading">Ссылка не найдена</h1>
+    <p>Вы открыли короткий адрес с кодом <strong class="text-break">{{ code }}</strong>.</p>
+    <p>Ссылки с таким кодом нет. Проверьте адрес или откройте список ссылок.</p>
+    <a class="btn btn-outline-danger" href="{{ url_for('list_links') }}">К списку ссылок</a>
+</div>
+{% endblock %}
