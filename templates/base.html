@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Shortener</title>
+    <style>
+        body {
+            margin: 32px 24px;
+            color: #222;
+            font-family: system-ui, sans-serif;
+        }
+
+        main {
+            max-width: 780px;
+            margin: 0 auto;
+        }
+
+        nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        label {
+            display: block;
+        }
+
+        input {
+            box-sizing: border-box;
+            width: 100%;
+            max-width: 480px;
+            padding: 6px;
+        }
+
+        button {
+            padding: 6px 12px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 8px;
+            border: 1px solid #bbb;
+            text-align: left;
+            overflow-wrap: anywhere;
+        }
+
+        .error {
+            color: #a12020;
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <h1>Shortener</h1>
+        <p>Версия 0.0.3</p>
+        <nav>
+            <a href="{{ url_for('index') }}">Главная</a>
+            <a href="{{ url_for('create_link') }}">Создать ссылку</a>
+            <a href="{{ url_for('list_links') }}">Список ссылок</a>
+            <a href="{{ url_for('follow_link', code='demo-not-found') }}">Недоступная ссылка</a>
+        </nav>
+
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>
