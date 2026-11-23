@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Список ссылок</h2>
+
+{% if links %}
+<table>
+    <thead>
+        <tr>
+            <th scope="col">Название</th>
+            <th scope="col">Исходный URL</th>
+            <th scope="col">Короткая ссылка</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for code, link in links %}
+        {% set short_url = url_for('follow_link', code=code, _external=True) %}
+        <tr>
+            <td>{{ link.title }}</td>
+            <td>{{ link.original_url }}</td>
+            <td><a href="{{ short_url }}">{{ short_url }}</a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>Ссылок пока нет.</p>
+{% endif %}
+{% endblock %}
