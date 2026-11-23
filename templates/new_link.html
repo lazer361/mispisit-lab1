@@ -1,22 +1,27 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h2>Создание короткой ссылки</h2>
+<div class="card">
+    <div class="card-body p-4">
+        <h1 class="h3 mb-4">Создание короткой ссылки</h1>
 
-{% if error %}
-<p class="error" role="alert">{{ error }}</p>
-{% endif %}
+        {% if error %}
+        <p class="alert alert-danger" role="alert">{{ error }}</p>
+        {% endif %}
 
-<form method="post" action="{{ url_for('create_link') }}">
-    <p>
-        <label for="original_url">Исходный URL</label>
-        <input id="original_url" name="original_url" type="url"
-               placeholder="https://example.org/" value="{{ original_url|default('') }}" required>
-    </p>
-    <p>
-        <label for="title">Название (необязательно)</label>
-        <input id="title" name="title" type="text" maxlength="255" value="{{ title|default('') }}">
-    </p>
-    <button type="submit">Создать</button>
-</form>
+        <form method="post" action="{{ url_for('create_link') }}">
+            <div class="mb-3">
+                <label class="form-label" for="original_url">Исходный URL</label>
+                <input class="form-control" id="original_url" name="original_url" type="url"
+                       placeholder="https://example.org/" value="{{ original_url|default('') }}" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="title">Название (необязательно)</label>
+                <input class="form-control" id="title" name="title" type="text" maxlength="255"
+                       value="{{ title|default('') }}">
+            </div>
+            <button class="btn btn-primary" type="submit">Создать</button>
+        </form>
+    </div>
+</div>
 {% endblock %}
