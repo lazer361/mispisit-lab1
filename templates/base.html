@@ -14,7 +14,7 @@
         <div class="container py-3">
             <div class="d-flex align-items-center gap-3 mb-3">
                 <a class="navbar-brand fw-bold fs-4" href="{{ url_for('index') }}">Shortener</a>
-                <span class="small text-body-secondary">Версия 0.0.4</span>
+                <span class="small text-body-secondary">Версия 0.0.5</span>
             </div>
             <nav class="nav nav-pills gap-1" aria-label="Основное меню">
                 {% set menu = [
@@ -22,6 +22,7 @@
                     ('create_link', 'Создать ссылку', url_for('create_link')),
                     ('list_links', 'Список ссылок', url_for('list_links')),
                     ('follow_link', 'Недоступная ссылка', url_for('follow_link', code='demo-not-found')),
+                    ('system_status', 'Состояние', url_for('system_status')),
                 ] %}
                 {% for endpoint, label, href in menu %}
                 <a class="nav-link{% if request.endpoint == endpoint %} active{% endif %}"

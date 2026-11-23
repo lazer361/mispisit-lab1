@@ -4,8 +4,9 @@ from secrets import token_hex
 from urllib.parse import urlsplit
 
 from flask import Flask, redirect, render_template, request, url_for
-from sqlalchemy import DateTime, String, Text, create_engine, func, select
+from sqlalchemy import DateTime, ForeignKey, String, Text, create_engine, func, select
 from sqlalchemy.dialects.postgresql import insert
+from sqlalchemy.exc import OperationalError
 from sqlalchemy.orm import DeclarativeBase, Mapped, Session, mapped_column
 
 app = Flask(__name__)
@@ -23,6 +24,15 @@ class Link(Base):
     title: Mapped[str] = mapped_column(String(255))
     original_url: Mapped[str] = mapped_column(Text)
     short_code: Mapped[str] = mapped_column(String(6), unique=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+
+class LinkEvent(Base):
+    __tablename__ = "link_events"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    link_id: Mapped[int] = mapped_column(ForeignKey("links.id"))
+    action: Mapped[str] = mapped_column(String(80))
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
 
@@ -70,7 +80,9 @@ def create_link():
                 original_url=original_url,
                 short_code=token_hex(3),
             ).on_conflict_do_nothing(index_elements=[Link.short_code]).returning(Link.id)
-            if session.scalar(statement) is not None:
+            link_id = session.scalar(statement)
+            if link_id is not None:
+                session.add(LinkEvent(link_id=link_id, action="Создана короткая ссылка"))
                 break
 
     return redirect(url_for("list_links"), code=303)
@@ -91,3 +103,19 @@ def follow_link(code):
         return render_template("link_not_found.html", code=code), 404
 
     return redirect(link.original_url)
+
+
+@app.get("/status")
+def system_status():
+    try:
+        with Session(engine) as session:
+            latest = session.execute(
+                select(LinkEvent, Link)
+                .join(Link)
+                .order_by(LinkEvent.id.desc())
+                .limit(1)
+            ).first()
+    except OperationalError:
+        return render_template("status.html", database_ready=False), 503
+
+    return render_template("status.html", database_ready=True, latest=latest)
