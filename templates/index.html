@@ -1,28 +1,5 @@
-<!doctype html>
-<html lang="ru">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Shortener</title>
-    <style>
-        body {
-            margin: 48px 24px;
-            color: #222;
-            font-family: system-ui, sans-serif;
-        }
+{% extends "base.html" %}
 
-        main {
-            max-width: 640px;
-            margin: 0 auto;
-        }
-    </style>
-</head>
-<body>
-    <main>
-        <h1>Shortener</h1>
-        <p>Сервис для тех, кому нужно сократить длинную ссылку и поделиться ею.</p>
-        <p>Версия {{ version }}</p>
-        <p>Разработка продолжается</p>
-    </main>
-</body>
-</html>
+{% block content %}
+<p>Сервис для тех, кому нужно сократить длинную ссылку и поделиться ею.</p>
+{% endblock %}
