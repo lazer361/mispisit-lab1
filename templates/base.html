@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Shortener</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap.min.css') }}">
+    <style>
+        .container { max-width: 960px; }
+    </style>
+</head>
+<body class="bg-body-tertiary">
+    <header class="bg-white border-bottom">
+        <div class="container py-3">
+            <div class="d-flex align-items-center gap-3 mb-3">
+                <a class="navbar-brand fw-bold fs-4" href="{{ url_for('index') }}">Shortener</a>
+                <span class="small text-body-secondary">Версия 0.0.6</span>
+            </div>
+            <nav class="nav nav-pills gap-1" aria-label="Основное меню">
+                {% set menu = [
+                    ('index', 'Главная', url_for('index')),
+                    ('create_link', 'Создать ссылку', url_for('create_link')),
+                    ('list_links', 'Список ссылок', url_for('list_links')),
+                    ('follow_link', 'Недоступная ссылка', url_for('follow_link', code='demo-not-found')),
+                    ('system_status', 'Состояние', url_for('system_status')),
+                ] %}
+                {% for endpoint, label, href in menu %}
+                <a class="nav-link{% if request.endpoint == endpoint %} active{% endif %}"
+                   href="{{ href }}"{% if request.endpoint == endpoint %} aria-current="page"{% endif %}>{{ label }}</a>
+                {% endfor %}
+            </nav>
+        </div>
+    </header>
+
+    <main class="container py-4">
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>
