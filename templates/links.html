@@ -11,6 +11,7 @@
                 <thead class="table-light">
                     <tr>
                         <th scope="col">Название</th>
+                        <th scope="col">Категория</th>
                         <th scope="col">Исходный URL</th>
                         <th scope="col">Короткая ссылка</th>
                     </tr>
@@ -20,6 +21,7 @@
                     {% set short_url = url_for('follow_link', code=link.short_code, _external=True) %}
                     <tr>
                         <td class="text-break">{{ link.title }}</td>
+                        <td class="text-break">{{ link.category }}</td>
                         <td class="text-break">{{ link.original_url }}</td>
                         <td><a class="text-break" href="{{ short_url }}">{{ short_url }}</a></td>
                     </tr>

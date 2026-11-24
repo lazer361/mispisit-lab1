@@ -20,6 +20,11 @@
                 <input class="form-control" id="title" name="title" type="text" maxlength="255"
                        value="{{ title|default('') }}">
             </div>
+            <div class="mb-3">
+                <label class="form-label" for="category">Категория (необязательно)</label>
+                <input class="form-control" id="category" name="category" type="text" maxlength="60"
+                       placeholder="Без категории" value="{{ category|default('') }}">
+            </div>
             <button class="btn btn-primary" type="submit">Создать</button>
         </form>
     </div>

@@ -2,7 +2,7 @@ name: mispisit-bezdnyakov-a
 
 services:
   app:
-    image: lazer361/mispisit-lab1:0.0.5
+    image: lazer361/mispisit-lab1:0.0.6
     ports:
       - "8080:8080"
     environment:
@@ -23,6 +23,34 @@ services:
       retries: 20
     volumes:
       - dbdata:/var/lib/postgresql/data
+
+  backup:
+    image: postgres:16
+    profiles: ["tools"]
+    environment:
+      PGPASSWORD: app
+    volumes:
+      - ./backup:/backup
+    command: >-
+      sh -c 'pg_dump -h db -U app -d app --clean --if-exists
+      -f /backup/app.sql.tmp && mv /backup/app.sql.tmp /backup/app.sql'
+    depends_on:
+      db:
+        condition: service_healthy
+
+  restore:
+    image: postgres:16
+    profiles: ["tools"]
+    environment:
+      PGPASSWORD: app
+    volumes:
+      - ./backup:/backup:ro
+    command: >-
+      psql -X -h db -U app -d app -v ON_ERROR_STOP=1
+      --single-transaction -f /backup/app.sql
+    depends_on:
+      db:
+        condition: service_healthy
 
 volumes:
   dbdata:

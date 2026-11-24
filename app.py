@@ -22,6 +22,7 @@ class Link(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     title: Mapped[str] = mapped_column(String(255))
+    category: Mapped[str] = mapped_column(String(60), server_default="Без категории")
     original_url: Mapped[str] = mapped_column(Text)
     short_code: Mapped[str] = mapped_column(String(6), unique=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
@@ -36,9 +37,6 @@ class LinkEvent(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
 
-Base.metadata.create_all(engine)
-
-
 @app.get("/")
 def index():
     return render_template("index.html")
@@ -51,6 +49,7 @@ def create_link():
 
     original_url = request.form.get("original_url", "").strip()
     title = request.form.get("title", "").strip()
+    category = request.form.get("category", "").strip()
     try:
         address = urlsplit(original_url)
         valid_url = (
@@ -68,15 +67,18 @@ def create_link():
         error = "Введите полный адрес, который начинается с http:// или https://."
     elif len(title) > 255:
         error = "Название должно содержать не больше 255 символов."
+    elif len(category) > 60:
+        error = "Категория должна содержать не больше 60 символов."
     if error:
         return render_template(
-            "new_link.html", original_url=original_url, title=title, error=error
+            "new_link.html", original_url=original_url, title=title, category=category, error=error
         ), 400
 
     with Session(engine) as session, session.begin():
         while True:
             statement = insert(Link).values(
                 title=title or address.hostname,
+                category=category or "Без категории",
                 original_url=original_url,
                 short_code=token_hex(3),
             ).on_conflict_do_nothing(index_elements=[Link.short_code]).returning(Link.id)
